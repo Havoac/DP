@@ -1,0 +1,82 @@
+/* 0-1 Knapsack Problem */
+/* https://www.geeksforgeeks.org/0-1-knapsack-problem-dp-10/ */
+
+/* Method 1 : Recursion (TC : 2^n)*/
+#include<bits/stdc++.h>
+using namespace std;
+
+int knapsack(int wt[], int value[], int n, int W){
+    if(n==0 || W==0)
+    return 0;
+    
+    if(wt[n-1]<=W)
+    return max(value[n-1]+knapsack(wt, value, n-1, W-wt[n-1]), knapsack(wt, value, n-1, W));
+    else
+    return knapsack(wt, value, n-1, W);
+}
+
+int main(){
+    int n, W;
+    cout<<"Enter Size : ";
+    cin>>n;
+    
+    int value[n], wt[n];
+    
+    cout<<"Enter Value Array : ";
+    for(int i=0 ; i<n ; i++)
+    cin>>value[i];
+    
+    cout<<"Enter Weight Array : ";
+    for(int i=0 ; i<n ; i++)
+    cin>>wt[i];
+    
+    cout<<"Enter Maximum Weight : ";
+    cin>>W;
+    
+    cout<<"Maximum Profit : "<<knapsack(wt, value, n, W);
+    
+    return 0;
+}
+
+
+/* Method 2 : DP (TC : n*W)*/
+#include<bits/stdc++.h>
+using namespace std;
+
+int knapsack(int wt[], int value[], int n, int W){
+    int dp[n+1][W+1];
+    
+    for(int i=0 ; i<=n ; i++){
+        for(int j=0 ; j<=W ; j++){
+            if(i==0 || j==0)
+            dp[i][j]=0;
+            else if(wt[i-1]<=j)
+            dp[i][j]=max(value[i-1]+dp[i-1][j-wt[i-1]], dp[i-1][j]);
+        }
+    }
+    
+    return dp[n][W];
+}
+
+int main(){
+    int n, W;
+    cout<<"Enter Size : ";
+    cin>>n;
+    
+    int value[n], wt[n];
+    
+    cout<<"Enter Value Array : ";
+    for(int i=0 ; i<n ; i++)
+    cin>>value[i];
+    
+    cout<<"Enter Weight Array : ";
+    for(int i=0 ; i<n ; i++)
+    cin>>wt[i];
+    
+    cout<<"Enter Maximum Weight : ";
+    cin>>W;
+    
+    cout<<"Maximum Profit : "<<knapsack(wt, value, n, W);
+    
+    return 0;
+}
