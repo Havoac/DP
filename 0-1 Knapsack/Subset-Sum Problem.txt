@@ -1,0 +1,87 @@
+/* Subset Sum Problem */
+/* https://www.geeksforgeeks.org/subset-sum-problem-dp-25/ */
+
+
+/* Method 1 : Recursion(TC : 2^n) */
+#include<bits/stdc++.h>
+using namespace std;
+
+bool isSubsetSum(int N, int arr[], int sum){
+    if(N==0)
+    return false;
+    
+    if(sum==0)
+    return true;
+    
+    if(arr[N-1]>sum)
+    return isSubsetSum(N-1, arr, sum);
+    else
+    return isSubsetSum(N-1, arr, sum-arr[N-1]) && isSubsetSum(N-1, arr, sum);
+}
+
+int main(){
+    int n, sum;
+    cout<<"Enter Size : ";
+    cin>>n;
+    
+    int arr[n];
+    cout<<"Enter Array Elements : ";
+    for(int i=0 ; i<n ; i++)
+    cin>>arr[i];
+    
+    cout<<"Enter the Sum value : ";
+    cin>>sum;
+    
+    if(isSubsetSum(n, arr, sum))
+    cout<<"Yes, It is Possible";
+    else
+    cout<<"No, It is Not Possible";
+    return 0;
+}
+
+
+
+/* Method 2 : DP(TC : n^2) */
+
+#include<bits/stdc++.h>
+using namespace std;
+
+bool isSubsetSum(int N, int arr[], int sum){
+    bool dp[N+1][sum+1];
+        
+    for(int i=0 ; i<=N ; i++){
+        for(int j=0 ; j<=sum ; j++){
+            if(j==0)
+                dp[i][j]=true;
+            else if(i==0)
+                dp[i][j]=false;
+            else{
+                if(arr[i-1]>j)
+                    dp[i][j]=dp[i-1][j];
+                else
+                    dp[i][j]=dp[i-1][j]||dp[i-1][j-arr[i-1]];
+            }
+        }
+    }
+    return dp[N][sum];
+}
+
+int main(){
+    int n, sum;
+    cout<<"Enter Size : ";
+    cin>>n;
+    
+    int arr[n];
+    cout<<"Enter Array Elements : ";
+    for(int i=0 ; i<n ; i++)
+    cin>>arr[i];
+    
+    cout<<"Enter the Sum value : ";
+    cin>>sum;
+    
+    if(isSubsetSum(n, arr, sum))
+    cout<<"Yes, It is Possible";
+    else
+    cout<<"No, It is Not Possible";
+    return 0;
+}
