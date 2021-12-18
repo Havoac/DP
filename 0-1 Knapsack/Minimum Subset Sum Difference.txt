@@ -1,0 +1,99 @@
+/* Minimum Subset Sum Difference */
+/* https://www.geeksforgeeks.org/partition-a-set-into-two-subsets-such-that-the-difference-of-subset-sums-is-minimum/ */
+
+
+/* Method 1 : Recursion(TC : sum*(2^n)) */
+
+#include<bits/stdc++.h>
+using namespace std;
+
+bool isSubsetSum(int N, int arr[], int sum){
+    if(N==0)
+    return false;
+    
+    if(sum==0)
+    return true;
+    
+    if(arr[N-1]>sum)
+    return isSubsetSum(N-1, arr, sum);
+    else
+    return isSubsetSum(N-1, arr, sum-arr[N-1]) || isSubsetSum(N-1, arr, sum);
+}
+
+int main(){
+    int n, sum=0, ans=0;
+    cout<<"Enter Size : ";
+    cin>>n;
+    
+    int arr[n];
+    cout<<"Enter Array Elements : ";
+    for(int i=0 ; i<n ; i++)
+    cin>>arr[i];
+    
+    for(int i=0 ; i<n ; i++)
+    sum=sum+arr[i];
+    
+    int k=sum/2;
+    
+    for(int i=k ; i>=0 ; i--){
+        if(isSubsetSum(n, arr, i)){
+            ans=sum-2*i;
+            break;
+        }
+    }
+    
+    cout<<"Minimum Subset Difference : "<<ans;
+    return 0;
+}
+
+
+/* Method 2 : DP(TC : sum*(n*sum)) */
+
+#include<bits/stdc++.h>
+using namespace std;
+
+bool isSubsetSum(int N, int arr[], int sum){
+    bool dp[N+1][sum+1];
+        
+    for(int i=0 ; i<=N ; i++){
+        for(int j=0 ; j<=sum ; j++){
+            if(j==0)
+                dp[i][j]=true;
+            else if(i==0)
+                dp[i][j]=false;
+            else{
+                if(arr[i-1]>j)
+                    dp[i][j]=dp[i-1][j];
+                else
+                    dp[i][j]=dp[i-1][j]||dp[i-1][j-arr[i-1]];
+            }
+        }
+    }
+    return dp[N][sum];
+}
+
+int main(){
+    int n, sum=0, ans=0;
+    cout<<"Enter Size : ";
+    cin>>n;
+    
+    int arr[n];
+    cout<<"Enter Array Elements : ";
+    for(int i=0 ; i<n ; i++)
+    cin>>arr[i];
+    
+    for(int i=0 ; i<n ; i++)
+    sum=sum+arr[i];
+    
+    int k=sum/2;
+    
+    for(int i=k ; i>=0 ; i--){
+        if(isSubsetSum(n, arr, i)){
+            ans=sum-2*i;
+            break;
+        }
+    }
+    
+    cout<<"Minimum Subset Difference : "<<ans;
+    return 0;
+}
