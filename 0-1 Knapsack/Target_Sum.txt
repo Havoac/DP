@@ -1,0 +1,89 @@
+/* Target Sum */
+/* https://leetcode.com/problems/target-sum/ */
+
+
+/* Method 1 : Recursion(TC : 2^n) */
+#include<bits/stdc++.h>
+using namespace std;
+
+int Total_Subset_Sum(int arr[], int sum, int n){
+    if(n==0){
+        if(sum==0)
+            return 1;
+        else
+            return 0;
+    }
+        
+    return Total_Subset_Sum(arr, sum-arr[n-1], n-1) + Total_Subset_Sum(arr, sum+arr[n-1], n-1);
+}
+
+int main(){
+    int n, target;
+    cout<<"Enter Size : ";
+    cin>>n;
+    
+    int arr[n];
+    cout<<"Enter Array Elements : ";
+    for(int i=0 ; i<n ; i++)
+    cin>>arr[i];
+    
+    cout<<"Enter the Target value : ";
+    cin>>target;
+    
+    cout<<"Total  : "<<Total_Subset_Sum(arr, target, n);
+    return 0;
+}
+
+
+/* Method 2 : DP(TC : n*sum) */
+#include<bits/stdc++.h>
+using namespace std;
+
+int dp[1001][2001];
+int total=0;
+int calculate(int nums[], int i, int sum, int n, int target) {
+    if (i==n) {
+        if(sum == target)
+            return 1;
+        else
+            return 0;
+    }
+    else {
+        if (dp[i][sum + total] != INT_MIN)
+            return dp[i][sum + total];
+        
+        int add = calculate(nums, i+1, sum+nums[i], n, target);
+        int subtract = calculate(nums, i+1, sum-nums[i], n, target);
+        dp[i][sum + total] = add + subtract;
+        return dp[i][sum + total];
+    }
+}
+    
+int findTargetSumWays(int nums[], int target, int n) {
+    for(int i=0 ; i<n ; i++)
+        total=total+nums[i];
+        
+    for(int i=0 ; i<n ; i++){
+        for(int j=0 ; j<=(2*total) ; j++)
+            dp[i][j]=INT_MIN;
+    }
+        
+    return calculate(nums, 0, 0, n, target);
+}
+
+int main(){
+    int n, target;
+    cout<<"Enter Size : ";
+    cin>>n;
+    
+    int arr[n];
+    cout<<"Enter Array Elements : ";
+    for(int i=0 ; i<n ; i++)
+    cin>>arr[i];
+    
+    cout<<"Enter the Target value : ";
+    cin>>target;
+    
+    cout<<"Total  : "<<findTargetSumWays(arr, target, n);
+    return 0;
+}
