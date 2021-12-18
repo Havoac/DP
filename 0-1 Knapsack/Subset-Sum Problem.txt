@@ -16,7 +16,7 @@ bool isSubsetSum(int N, int arr[], int sum){
     if(arr[N-1]>sum)
     return isSubsetSum(N-1, arr, sum);
     else
-    return isSubsetSum(N-1, arr, sum-arr[N-1]) && isSubsetSum(N-1, arr, sum);
+    return isSubsetSum(N-1, arr, sum-arr[N-1]) || isSubsetSum(N-1, arr, sum);
 }
 
 int main(){
