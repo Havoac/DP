@@ -1,0 +1,84 @@
+/* Cutting Rod Problem */
+/* https://www.geeksforgeeks.org/cutting-a-rod-dp-13/ */
+
+/* Method 1 : Recursion(TC : 2^n) */
+#include<bits/stdc++.h>
+using namespace std;
+
+int calculate(int price[], int length[], int max_length, int n){
+    if(max_length==0 || n==0)
+    return 0;
+        
+    if(max_length >= length[n-1])
+        return max(price[n-1]+calculate(price, length, max_length-length[n-1], n), calculate(price, length, max_length, n-1));
+    else
+        return calculate(price, length, max_length, n-1);
+}
+
+int cutRod(int price[], int n) {
+    int count=0;
+    int length[n];
+        
+    for(int i=0 ; i<n ; i++)
+    length[i]=i+1;
+        
+    return calculate(price, length, n, n);
+}
+
+int main()
+{ 
+    int n;
+    cout<<"Enter Size : ";
+    cin>>n;
+    int price[n];
+    cout<<"Enter Price Array : ";
+    
+    for(int i=0 ; i<n ; i++)
+    cin>>price[i];
+    
+    cout<<"Max Profit is : "<<cutRod(price, n)<<endl;
+    return 0;
+}
+
+
+/* Method 2 : DP(TC : n^2) */
+#include<bits/stdc++.h>
+using namespace std;
+
+int cutRod(int price[], int n) {
+	int count=0;
+        int length[n];
+        
+        for(int i=0 ; i<n ; i++)
+        length[i]=i+1;
+        
+        int dp[n+1][n+1];
+    
+        for(int i=0 ; i<=n ; i++){
+            for(int j=0 ; j<=n ; j++){
+                if(i==0 || j==0)
+                dp[i][j]=0;
+                else if(j>=length[i-1])
+                dp[i][j]=max(price[i-1]+dp[i][j-length[i-1]], dp[i-1][j]);
+                else
+                dp[i][j]=dp[i-1][j];
+            }
+        }
+    
+        return dp[n][n];
+}
+
+int main()
+{ 
+    int n;
+    cout<<"Enter Size : ";
+    cin>>n;
+    int price[n];
+    cout<<"Enter Price Array : ";
+    
+    for(int i=0 ; i<n ; i++)
+    cin>>price[i];
+    
+    cout<<"Max Profit is : "<<cutRod(price, n)<<endl;
+    return 0;
+}
