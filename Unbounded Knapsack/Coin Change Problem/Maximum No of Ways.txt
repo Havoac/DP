@@ -1,0 +1,88 @@
+/* Maximum No of Ways */
+/* https://www.geeksforgeeks.org/coin-change-dp-7/ */
+
+
+/* Method 1 : Recursion(TC : 2^n) */
+#include<bits/stdc++.h>
+using namespace std;
+
+void total_ways(int coins[], int n, int amount, int &count){
+    if(amount==0){
+        count++;
+        return ;
+    }
+    
+    if(n==0)
+    return ;
+    
+    if(amount>=coins[n-1]){
+        total_ways(coins, n, amount-coins[n-1], count);
+        total_ways(coins, n-1, amount, count);
+    }
+    else
+    total_ways(coins, n-1, amount, count);
+}
+
+int main(){
+    int n, amount, count=0;
+    cout<<"Enter Size : ";
+    cin>>n;
+    
+    int coins[n];
+    cout<<"Enter Values of Coins : ";
+    for(int i=0 ; i<n ; i++)
+    cin>>coins[i];
+    
+    cout<<"Enter the Amount : ";
+    cin>>amount;
+    
+    total_ways(coins, n, amount, count);
+    
+    cout<<"Total Ways : "<<count;
+    return 0;
+}
+
+
+/* Method 2 : DP(TC : n*amount) */
+#include<bits/stdc++.h>
+using namespace std;
+
+int total_ways(int coins[], int n, int amount){
+    int dp[n+1][amount+1];
+    
+    memset(dp, 0, sizeof(dp));
+    
+    for(int i=0 ; i<=n ; i++){
+        for(int j=0 ; j<=amount ; j++){
+            if(j==0)
+            dp[i][j]=1;
+            else if(i==0)
+            dp[i][j]=0;
+            else{
+                if(j>=coins[i-1])
+                dp[i][j]=dp[i][j-coins[i-1]]+dp[i-1][j];
+                else
+                dp[i][j]=dp[i-1][j];
+            }
+        }
+    }
+    
+    return dp[n][amount];
+}
+
+int main(){
+    int n, amount;
+    cout<<"Enter Size : ";
+    cin>>n;
+    
+    int coins[n];
+    cout<<"Enter Values of Coins : ";
+    for(int i=0 ; i<n ; i++)
+    cin>>coins[i];
+    
+    cout<<"Enter the Amount : ";
+    cin>>amount;
+
+    cout<<"Total Ways : "<<total_ways(coins, n, amount);;
+    return 0;
+}
