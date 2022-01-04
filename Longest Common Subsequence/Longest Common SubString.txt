@@ -1,0 +1,76 @@
+/* Lowest Common SubString */
+/* https://www.geeksforgeeks.org/longest-common-substring-dp-29/ */
+
+/* Method 1 : Recursion (TC : 3^(m+n))*/
+#include<bits/stdc++.h>
+using namespace std;
+
+int longest_common_substring(string s1, int n, string s2, int m, int count){
+    if(n==0 || m==0)
+    return count;
+    
+    int lcs1=count;
+    
+    if(s1[n-1]==s2[m-1])
+    lcs1=longest_common_substring(s1, n-1, s2, m-1, count+1);
+    
+    int lcs2=longest_common_substring(s1, n-1, s2, m, 0);
+    int lcs3=longest_common_substring(s1, n, s2, m-1, 0);
+    
+    return max(lcs1, max(lcs2, lcs3));
+    }
+
+int main()
+{
+    cout<<"Enter first string (X) : ";
+    string X;
+    cin>>X;
+    cout<<"Enter second string (Y) : ";
+    string Y;
+    cin>>Y;
+
+    cout<<"Length of Longest Common Sub-String is : "<<longest_common_substring(X, X.length(), Y, Y.length(), 0)<<endl;
+    return 0;
+}
+
+
+
+/* Method 2 : DP (TC : m*n) */
+#include<bits/stdc++.h>
+using namespace std;
+
+int longest_common_substring(string s1, int n, string s2, int m, int count){
+    int ans=0;
+        
+    int dp[n+1][m+1];
+        
+    for(int i=0 ; i<=n ; i++){
+        for(int j=0 ; j<=m ; j++){
+            if(i==0 || j==0)
+            dp[i][j]=0;
+            else{
+                if(s1[i-1]==s2[j-1]){
+                    dp[i][j]=1+dp[i-1][j-1];
+                    ans=max(ans, dp[i][j]);
+                }
+                else
+                dp[i][j]=0;
+            }
+        }
+    }
+        
+    return ans;
+}
+
+int main()
+{
+    cout<<"Enter first string (X) : ";
+    string X;
+    cin>>X;
+    cout<<"Enter second string (Y) : ";
+    string Y;
+    cin>>Y;
+
+    cout<<"Length of Longest Common Sub-String is : "<<longest_common_substring(X, X.length(), Y, Y.length(), 0)<<endl;
+    return 0;
+}
