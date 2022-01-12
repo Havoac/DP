@@ -1,0 +1,76 @@
+/* Print Shortest Common Super-Sequence */
+/* https://www.geeksforgeeks.org/print-shortest-common-supersequence/ */
+
+/* DP : (TC : m*n)*/
+#include<bits/stdc++.h>
+using namespace std;
+
+int dp[1001][1001];
+
+void LCS(string s1, int len1, string s2, int len2){
+    for(int i=0 ; i<=len1 ; i++){
+        for(int j=0 ; j<=len2 ; j++){
+            if(i==0 || j==0)
+                dp[i][j]=0;
+            else{
+                if(s1[i-1]==s2[j-1])
+                    dp[i][j]=1+dp[i-1][j-1];
+                else
+                    dp[i][j]=max(dp[i-1][j], dp[i][j-1]);
+            }
+        }
+    }
+}
+    
+string shortestCommonSupersequence(string s1, string s2) {
+    string ans="";
+        
+    LCS(s1, s1.length(), s2, s2.length());
+        
+    int i=s1.length(), j=s2.length();
+        
+    while(i>0 && j>0){
+        if(s1[i-1]==s2[j-1]){
+            ans+=s1[i-1];
+            i--;
+            j--;
+        }
+        else{
+            if(dp[i-1][j]>dp[i][j-1]){
+                ans+=s1[i-1];
+                i--;
+            }
+            else{
+                ans+=s2[j-1];
+                j--;
+            }
+        }
+    }
+        
+    while(i>0){
+        ans+=s1[i-1];
+        i--;
+    }
+        
+    while(j>0){
+        ans+=s2[j-1];
+        j--;
+    }
+        
+    reverse(ans.begin(), ans.end());
+        
+    return ans;
+}
+
+int main()
+{
+    cout<<"Enter first string (X) : ";
+    string X;
+    cin>>X;
+    cout<<"Enter second string (Y) : ";
+    string Y;
+    cin>>Y;
+
+    cout<<"Shortest Common Super-Sequence is : "<<shortestCommonSupersequence(X, Y)<<endl;
+    return 0;
+}
